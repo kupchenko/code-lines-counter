@@ -32,6 +32,7 @@ public class FileScannerService {
         } else {
             FileInfoDto fileInfoDto = countPathLines(location);
             printFileInfo(fileInfoDto);
+            System.out.println();
         }
     }
 
@@ -42,7 +43,7 @@ public class FileScannerService {
     }
 
     private void printFileInfo(FileInfoDto info) {
-        System.out.print(info.getFileName() + " : " + info.getNumberOfLines() + "; ");
+        System.out.print(info.getFileName() + " : " + info.getNumberOfLines() + " ");
     }
 
     private FileInfoDto countPathLines(Path path) {

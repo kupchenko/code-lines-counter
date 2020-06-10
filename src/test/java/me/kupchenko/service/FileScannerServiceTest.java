@@ -40,7 +40,7 @@ public class FileScannerServiceTest {
 
         fileScannerService.scan(executionProperties);
 
-        assertThat("test-files : 11: Hello.java : 6; Dave.java : 5; \n", is(outContent.toString()));
+        assertThat("test-files : 11: Hello.java : 6 Dave.java : 5 \n", is(outContent.toString()));
     }
 
     @Test
