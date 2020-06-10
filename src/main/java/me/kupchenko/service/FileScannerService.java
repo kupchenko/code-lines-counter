@@ -4,9 +4,12 @@ import lombok.SneakyThrows;
 import me.kupchenko.config.ExecutionProperties;
 import me.kupchenko.dto.FileInfoDto;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileScannerService {
     private static final String PATTERN_MULTI_ROW_COMMENT = "/\\*([\\S\\s]+?)\\*/";
@@ -19,20 +22,27 @@ public class FileScannerService {
         if (Files.notExists(location)) {
             System.out.println("Location not found");
         } else if (Files.isDirectory(location)) {
-            long sum = Files.find(location, Integer.MAX_VALUE, (path, basicFileAttributes) -> Files.isRegularFile(path))
-                    .map(this::countPathLines)
-                    .peek(this::printFileInfo)
+            List<FileInfoDto> fileInfoDtos = getFileInfoDtos(location);
+            long sum = fileInfoDtos.stream()
                     .mapToLong(FileInfoDto::getNumberOfLines)
                     .sum();
-            System.out.println(location.getFileName().toString() + " : " + sum);
+            System.out.print(location.getFileName().toString() + " : " + sum + ": ");
+            fileInfoDtos.forEach(this::printFileInfo);
+            System.out.println();
         } else {
             FileInfoDto fileInfoDto = countPathLines(location);
             printFileInfo(fileInfoDto);
         }
     }
 
+    private List<FileInfoDto> getFileInfoDtos(Path location) throws IOException {
+        return Files.find(location, Integer.MAX_VALUE, (path, basicFileAttributes) -> Files.isRegularFile(path))
+                .map(this::countPathLines)
+                .collect(Collectors.toList());
+    }
+
     private void printFileInfo(FileInfoDto info) {
-        System.out.println(info.getFileName() + " : " + info.getNumberOfLines());
+        System.out.print(info.getFileName() + " : " + info.getNumberOfLines() + "; ");
     }
 
     private FileInfoDto countPathLines(Path path) {
