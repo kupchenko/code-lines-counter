@@ -20,23 +20,18 @@ public class FileScannerServiceTest {
     public static final String SRC_MAIN_RESOURCES_TEST_FILES = "src/test/resources/test-files";
     private FileScannerService fileScannerService;
 
-
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
 
     @Before
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
         fileScannerService = new FileScannerService();
     }
 
     @After
     public void restoreStreams() {
         System.setOut(originalOut);
-        System.setErr(originalErr);
     }
 
     @Test
