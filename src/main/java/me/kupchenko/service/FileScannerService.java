@@ -35,7 +35,7 @@ public class FileScannerService {
         }
     }
 
-    private List<FileInfoDto> getFileInfoDtos(Path location) throws IOException {
+    List<FileInfoDto> getFileInfoDtos(Path location) throws IOException {
         return Files.find(location, Integer.MAX_VALUE, (path, basicFileAttributes) -> Files.isRegularFile(path))
                 .map(this::countPathLines)
                 .collect(Collectors.toList());
